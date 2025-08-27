@@ -33,14 +33,20 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
             },
 
             RunEvent::Ready => {
+                let show_i = MenuItem::with_id(app, "show", "Show", true, None::<&str>).unwrap();
                 let quit_i = MenuItem::with_id(app, "quit", "Quit", true, None::<&str>).unwrap();
-                let menu = Menu::with_items(app, &[&quit_i]).unwrap();
+                let menu = Menu::with_items(app, &[&show_i, &quit_i]).unwrap();
 
                 let _ = TrayIconBuilder::with_id("__ON_RCLONE:TRAY")
                     .icon(DEFAULT_TRAY_ICON)
                     .icon_as_template(true)
                     .menu(&menu)
                     .on_menu_event(move |app, event| match event.id.as_ref() {
+                        "show" => {
+                            let window = app.get_webview_window("main").expect("no main window");
+                            window.show().unwrap();
+                            window.set_focus().unwrap();
+                        },
                         "quit" => {
                             app.exit(0);
                         }
