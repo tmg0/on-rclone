@@ -8,6 +8,7 @@ use tokio::sync::RwLock;
 mod commands;
 mod error;
 mod rclone;
+mod fse;
 
 pub use error::{Error, Result};
 pub use rclone::RcloneState;

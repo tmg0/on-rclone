@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::Result;
+use crate::{Result, fse};
 use tauri::{AppHandle, Runtime};
 use tauri_plugin_shell::process::CommandChild;
 use tauri_plugin_shell::ShellExt;
@@ -47,6 +47,7 @@ impl RcloneState {
         mountpoint: String,
     ) -> Result<()> {
         let remote_path = format!("{}:{}", &remote, &remote_path);
+        fse::ensure_dir(&mountpoint).await?;
 
         self.run_rclone_command(
             app,
